@@ -20,10 +20,28 @@ public:
 	
 public: 
 	void OnHostileCheckboxChanged(ECheckBoxState NewState);
-	void OnObjectChanged(const FAssetData&);
+	void OnMeshChanged(const FAssetData&);
+	void OnAIControllerChanged(const FAssetData&);
+	static FString GetMeshPath()
+	{
+		if (MeshAssetData.IsValid())
+		{
+			return MeshAssetData.ObjectPath.ToString();
+		}
+		return "";
+	}
+	static FString GetAIControllerPath()
+	{
+		if (MeshAssetData.IsValid())
+		{
+			return MeshAssetData.ObjectPath.ToString();
+		}
+		return "";
+	}
 protected:
 	bool bIsTestBoxChecked = false;
-	FString MeshPath{};
+	static FAssetData MeshAssetData;
+	static FAssetData AIControllerAssetData;
 	TSharedPtr<FAssetThumbnailPool> MeshThumbnailPool;
 	TSharedPtr<FAssetThumbnailPool> AIControllerThumbnailPool;
 };

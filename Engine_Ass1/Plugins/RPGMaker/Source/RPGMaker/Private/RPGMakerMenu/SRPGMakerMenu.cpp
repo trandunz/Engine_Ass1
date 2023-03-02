@@ -11,6 +11,9 @@
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
+FAssetData SRPGMakerMenu::MeshAssetData{};
+FAssetData SRPGMakerMenu::AIControllerAssetData{};
+
 void SRPGMakerMenu::Construct(const FArguments& InArgs)
 {
 	MeshThumbnailPool = MakeShareable(new FAssetThumbnailPool(24));
@@ -52,8 +55,9 @@ void SRPGMakerMenu::Construct(const FArguments& InArgs)
 			.AllowCreate(true)
 			.AllowClear(true)
 			.ThumbnailPool(MeshThumbnailPool)
+			.ObjectPath_Static(&SRPGMakerMenu::GetMeshPath)
 			.DisplayUseSelected(true)
-			.OnObjectChanged(FOnSetObject::CreateSP(this, &SRPGMakerMenu::OnObjectChanged))
+			.OnObjectChanged(FOnSetObject::CreateSP(this, &SRPGMakerMenu::OnMeshChanged))
 		]
 	]
 	+SVerticalBox::Slot()
@@ -73,48 +77,6 @@ void SRPGMakerMenu::Construct(const FArguments& InArgs)
 			.Text(FText::FromString(""))
 		]
 	]
-	+SVerticalBox::Slot()
-	.AutoHeight()
-	[
-		SNew(SHorizontalBox)
-		+SHorizontalBox::Slot()
-		.VAlign(VAlign_Top)
-		[
-			SNew(STextBlock)
-			.Text(FText::FromString("Hostile?"))
-		]
-		+ SHorizontalBox::Slot()
-		.VAlign(VAlign_Top)
-		[
-			SNew(SCheckBox)
-			.OnCheckStateChanged(FOnCheckStateChanged::CreateSP(this, &SRPGMakerMenu::OnHostileCheckboxChanged))
-		]
-	]
-	+SVerticalBox::Slot()
-	.AutoHeight()
-	[
-		SNew(SHorizontalBox)
-		+SHorizontalBox::Slot()
-		.VAlign(VAlign_Top)
-		[
-			SNew(STextBlock)
-			.Text(FText::FromString("AI Controller"))
-		]
-		+ SHorizontalBox::Slot()
-		.VAlign(VAlign_Top)
-		[
-			SNew(SObjectPropertyEntryBox)
-			.AllowedClass(AAIController::StaticClass())
-			.EnableContentPicker(true)
-			.DisplayBrowse(true)
-			.DisplayThumbnail(true)
-			.AllowCreate(true)
-			.AllowClear(true)
-			.ThumbnailPool(AIControllerThumbnailPool)
-			.DisplayUseSelected(true)
-			.OnObjectChanged(FOnSetObject::CreateSP(this, &SRPGMakerMenu::OnObjectChanged))
-		]
-	]
 	];
 }
 
@@ -124,10 +86,16 @@ void SRPGMakerMenu::OnHostileCheckboxChanged(ECheckBoxState NewState)
 	bIsTestBoxChecked = NewState == ECheckBoxState::Checked ? true : false;
 }
 
-void SRPGMakerMenu::OnObjectChanged(const FAssetData& _assetData)
+void SRPGMakerMenu::OnMeshChanged(const FAssetData& _assetData)
 {
-	MeshPath = _assetData.GetSoftObjectPath().ToString();
-	
+	//UE_LOG(LogTemp, Warning, TEXT(" %s "), *_assetData.ObjectPath.ToString() );
+	MeshAssetData = _assetData;
 }
+
+void SRPGMakerMenu::OnAIControllerChanged(const FAssetData& _assetData)
+{
+	AIControllerAssetData = _assetData;
+}
+
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
