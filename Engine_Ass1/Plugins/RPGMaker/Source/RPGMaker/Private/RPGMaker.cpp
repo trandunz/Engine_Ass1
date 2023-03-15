@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "RPGMaker.h"
 #include "RPGMakerStyle.h"
 #include "RPGMakerCommands.h"
@@ -16,8 +14,6 @@ static const FName RPGMakerTabName("RPGMaker");
 
 void FRPGMakerModule::StartupModule()
 {
-	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
-	
 	FRPGMakerStyle::Initialize();
 	FRPGMakerStyle::ReloadTextures();
 
@@ -39,9 +35,6 @@ void FRPGMakerModule::StartupModule()
 
 void FRPGMakerModule::ShutdownModule()
 {
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
-
 	UToolMenus::UnRegisterStartupCallback(this);
 
 	UToolMenus::UnregisterOwner(this);
@@ -59,7 +52,6 @@ TSharedRef<SDockTab> FRPGMakerModule::OnSpawnPluginTab(const FSpawnTabArgs& Spaw
 	return SNew(SDockTab)
 		.TabRole(ETabRole::NomadTab)
 		[
-			// Put your tab content here!
 			SNew(SRPGMakerMenu)
 		];
 }
@@ -71,7 +63,6 @@ void FRPGMakerModule::PluginButtonClicked()
 
 void FRPGMakerModule::RegisterMenus()
 {
-	// Owner will be used for cleanup in call to UToolMenus::UnregisterOwner
 	FToolMenuOwnerScoped OwnerScoped(this);
 
 	{
