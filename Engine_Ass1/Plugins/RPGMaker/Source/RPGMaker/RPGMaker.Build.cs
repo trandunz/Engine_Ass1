@@ -7,49 +7,58 @@ public class RPGMaker : ModuleRules
 	public RPGMaker(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
-		
-		PublicIncludePaths.AddRange(
-			new string[] {
-				// ... add public include paths required here ...
-			}
-			);
-				
-		
-		PrivateIncludePaths.AddRange(
-			new string[] {
-				// ... add other private include paths required here ...
-			}
-			);
-			
-		
+
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
 				"Core",
-				// ... add other public dependencies that you statically link with here ...
+				"Engine",
+				"CoreUObject",
+				"InputCore",
+				"LevelEditor",
+				"Slate",
+				"SlateCore",
+				"TranslationEditor",
+				"EditorStyle",
+				"AssetTools",
+				"EditorWidgets",
+				"UnrealEd",
+				"BlueprintGraph",
+				"AnimGraph",
+				"ComponentVisualizers",
+				"PropertyEditor"
 			}
 			);
-			
-		
+
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Projects",
-				"InputCore",
-				"UnrealEd",
-				"ToolMenus",
+				"Core",
 				"CoreUObject",
 				"Engine",
+				"AppFramework",
 				"Slate",
 				"SlateCore",
+				"TranslationEditor",
+				"AnimGraph",
+				"UnrealEd",
+				"KismetWidgets",
+				"MainFrame",
+				"PropertyEditor",
+				"ComponentVisualizers",
+				
+				"Projects",
+				"InputCore",
+				"ToolMenus",
 				"AssetManagerEditor",
 				"EditorStyle",
 				"ContentBrowser",
 				"ContentBrowserData",
-				"PropertyEditor",
+				
 				"EditorScriptingUtilities",
+				"EditorFramework",
+				"EditorWidgets",
 				"AIModule"
-				// ... add private dependencies that you statically link with here ...	
 			}
 			);
 		

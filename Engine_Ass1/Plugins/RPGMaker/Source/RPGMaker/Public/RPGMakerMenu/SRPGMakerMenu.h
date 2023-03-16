@@ -12,21 +12,26 @@ public:
 
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
-	
 public: 
 	void OnHostileCheckboxChanged(ECheckBoxState NewState);
 	void OnMeshChanged(const FAssetData&);
 	void OnSpawnClicked();
 	void OnNameChanged(const FText&);
 	void OnAIControllerChanged(const FAssetData&);
+	void OnUseCursorForPositionClicked();
 
-	void OnXPositionChanged(float);
-	TOptional<float> GetXPosition() const;
-	void OnYPositionChanged(float);
-	TOptional<float> GetYPosition() const;
-	void OnZPositionChanged(float);
-	TOptional<float> GetZPosition() const;
+	void OnPositionChanged(FVector::FReal NewValue, ETextCommit::Type CommitInfo, int TransformField, EAxisList::Type Axis, bool bCommitted);
+	
+	void OnXPositionChanged(double);
+	TOptional<double> GetXPosition() const;
+	void OnYPositionChanged(double);
+	TOptional<double> GetYPosition() const;
+	void OnZPositionChanged(double);
+	TOptional<double> GetZPosition() const;
 	void OnResetPosition();
+
+
+	void OnRotationChanged(FVector::FReal NewValue, ETextCommit::Type CommitInfo, int TransformField, EAxisList::Type Axis, bool bCommitted);
 	
 	void OnXRotationChanged(double);
 	TOptional<double> GetXRotation() const;
@@ -36,20 +41,32 @@ public:
 	TOptional<double> GetZRotation() const;
 	void OnResetRotation();
 
-	void OnXScaleChanged(float);
-	TOptional<float> GetXScale() const;
-	void OnYScaleChanged(float);
-	TOptional<float> GetYScale() const;
-	void OnZScaleChanged(float);
-	TOptional<float> GetZScale() const;
+
+	void OnScaleChanged(FVector::FReal NewValue, ETextCommit::Type CommitInfo, int TransformField, EAxisList::Type Axis, bool bCommitted);
+	
+	void OnXScaleChanged(double);
+	TOptional<double> GetXScale() const;
+	void OnYScaleChanged(double);
+	TOptional<double> GetYScale() const;
+	void OnZScaleChanged(double);
+	TOptional<double> GetZScale() const;
 	void OnResetScale();
 	
 	static FString GetMeshPath();
 	static FString GetAIControllerPath();
-protected:
-	FTransform TransformToPlace{};
+
+	FVector GetWorldPositionOfMouse();
 	
-	bool bIsTestBoxChecked = false;
+protected:
+	void InitMouseClickEvent();
+
+	FSlateColor GetInnerBackgroundColor() const;
+	FSlateColor GetRowBackgroundColor(int32 IndentLevel, bool IsHovered) const;
+	
+	FTransform TransformToPlace{};
+
+	bool bIsMousePickingLocation{};
+	bool bIsTestBoxChecked{};
 	FText Name{};
 	static FAssetData MeshAssetData;
 	static FAssetData AIControllerAssetData;
