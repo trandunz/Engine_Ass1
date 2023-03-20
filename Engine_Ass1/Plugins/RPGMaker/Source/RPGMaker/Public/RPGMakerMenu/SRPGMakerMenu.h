@@ -1,6 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DetailColumnSizeData.h"
+#include "Widgets/Layout/SSplitter.h"
 #include "Widgets/SCompoundWidget.h"
 
 class RPGMAKER_API SRPGMakerMenu : public SCompoundWidget
@@ -12,12 +14,14 @@ public:
 
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
-public: 
+protected:
+	
+	
 	void OnHostileCheckboxChanged(ECheckBoxState NewState);
 	void OnMeshChanged(const FAssetData&);
 	void OnSpawnClicked();
 	void OnNameChanged(const FText&);
-	void OnAIControllerChanged(const FAssetData&);
+	void OnBlackboardChanged(const FAssetData&);
 	void OnUseCursorForPositionClicked();
 
 	void OnPositionChanged(FVector::FReal NewValue, ETextCommit::Type CommitInfo, int TransformField, EAxisList::Type Axis, bool bCommitted);
@@ -53,7 +57,11 @@ public:
 	void OnResetScale();
 	
 	static FString GetMeshPath();
-	static FString GetAIControllerPath();
+	static FString GetBlackboardPath();
+	static FString AnimBPPath();
+	
+	void OnAnimBPChanged(const FAssetData&);
+	const SSplitter::FOnSlotResized& GetOnNameColumnResized() const;
 
 	FVector GetWorldPositionOfMouse();
 	
@@ -69,7 +77,16 @@ protected:
 	bool bIsTestBoxChecked{};
 	FText Name{};
 	static FAssetData MeshAssetData;
-	static FAssetData AIControllerAssetData;
+	static FAssetData AIBlackboardAssetData;
+	static FAssetData AnimationBPData;
 	TSharedPtr<FAssetThumbnailPool> MeshThumbnailPool;
-	TSharedPtr<FAssetThumbnailPool> AIControllerThumbnailPool;
+	TSharedPtr<FAssetThumbnailPool> AIBlackboardThumbnailPool;
+	TSharedPtr<FAssetThumbnailPool> AnimBPThumbnailPool;
+
+	FDetailColumnSizeData NameColumnData;
+	SSplitter::FOnSlotResized OnNameColumnResized;
+
+private:
+	void InitV2Menu();
+	void InitStandardMenu();
 };
