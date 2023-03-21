@@ -53,83 +53,67 @@ void SPluginDesignerMenu::Construct(const FArguments& InArgs)
 
 void SPluginDesignerMenu::InitV2Menu()
 {
-	TSharedRef<SVerticalBox> parentBox = SNew(SVerticalBox)
+	TSharedRef<SVerticalBox> verticalBox = SNew(SVerticalBox)
 	+SVerticalBox::Slot()
 	.AutoHeight()
 	[
-		SNew(SBorder)
-		.Padding(10)
-		.HAlign(HAlign_Fill)
-		.VAlign(VAlign_Top)
-		[
-			SNew(SVerticalBox)
-			+SVerticalBox::Slot()
-			.AutoHeight()
-			[
-				Statics::CreateNewTitle("Plugin Designer")
-			]
-			+SVerticalBox::Slot()
-			.AutoHeight()
-			[
-				Statics::CreateButton<SPluginDesignerMenu>(this, "Create New Plugin", &SPluginDesignerMenu::OnCreatePluginClicked)
-			]
-		]
+		Statics::CreateNewTitle("Plugin Designer")
 	]
 	+SVerticalBox::Slot()
 	.AutoHeight()
 	[
-		SNew(SBorder)
-		.Padding(10)
-		.HAlign(HAlign_Fill)
-		.VAlign(VAlign_Top)
-		[
-			SNew(SVerticalBox)
-			+SVerticalBox::Slot()
-			.AutoHeight()
-			[
-				Statics::CreateNewTitle("NPC (Example Menu)")
-			]
-			+SVerticalBox::Slot()
-			.AutoHeight()
-			[
-				Statics::CreateNamedInputField<SPluginDesignerMenu>(this, "Name: ", &SPluginDesignerMenu::OnNameChanged)
-			]
-			+SVerticalBox::Slot()
-			.AutoHeight()
-			[
-				Statics::CreateBlueprintPicker("Mesh", USkeletalMesh::StaticClass(), &SPluginDesignerMenu::GetMeshPath, FOnSetObject::CreateSP(this, &SPluginDesignerMenu::OnMeshChanged), MeshThumbnailPool)
-			]
-			+SVerticalBox::Slot()
-			.AutoHeight()
-			[
-				Statics::CreateBlueprintPicker("Animation Blueprint", UAnimBlueprint::StaticClass(), &SPluginDesignerMenu::AnimBPPath , FOnSetObject::CreateSP(this, &SPluginDesignerMenu::OnAnimBPChanged), AnimBPThumbnailPool)
-			]
-			+SVerticalBox::Slot()
-			.AutoHeight()
-			[
-				Statics::CreateVectorInputField<SPluginDesignerMenu>(this, "Position", &SPluginDesignerMenu::GetXPosition, &SPluginDesignerMenu::GetYPosition, &SPluginDesignerMenu::GetZPosition, &SPluginDesignerMenu::OnPositionChanged, &SPluginDesignerMenu::OnResetPosition)
-			]
-			+SVerticalBox::Slot()
-			.AutoHeight()
-			[
-				Statics::CreateVectorInputField<SPluginDesignerMenu>(this, "Rotation", &SPluginDesignerMenu::GetXRotation, &SPluginDesignerMenu::GetYRotation, &SPluginDesignerMenu::GetZRotation, &SPluginDesignerMenu::OnRotationChanged, &SPluginDesignerMenu::OnResetRotation, 1)
-			]
-			+SVerticalBox::Slot()
-			.AutoHeight()
-			[
-				Statics::CreateVectorInputField<SPluginDesignerMenu>(this, "Scale", &SPluginDesignerMenu::GetXScale, &SPluginDesignerMenu::GetYScale, &SPluginDesignerMenu::GetZScale, &SPluginDesignerMenu::OnScaleChanged, &SPluginDesignerMenu::OnResetScale, 2)
-			]
-			+SVerticalBox::Slot()
-			.AutoHeight()
-			[
-				Statics::CreateButton<SPluginDesignerMenu>(this, "Spawn", &SPluginDesignerMenu::OnSpawnClicked)
-			]
-		]
+		Statics::CreateNamedButton<SPluginDesignerMenu>(this, "Create New Plugin", &SPluginDesignerMenu::OnPluginNameChanged,&SPluginDesignerMenu::OnCreatePluginClicked)
+	]
+	+SVerticalBox::Slot()
+	.AutoHeight()
+	[
+		Statics::CreateButton(this, "FilePath",&SPluginDesignerMenu::OnBrowseButtonClicked)
+	]
+	+SVerticalBox::Slot()
+	.AutoHeight()
+	[
+		Statics::CreateNewTitle("NPC")
+	]
+	+SVerticalBox::Slot()
+	.AutoHeight()
+	[
+		Statics::CreateNamedInputField<SPluginDesignerMenu>(this, "Name: ", &SPluginDesignerMenu::OnNameChanged)
+	]
+	+SVerticalBox::Slot()
+	.AutoHeight()
+	[
+		Statics::CreateBlueprintPicker("Mesh", USkeletalMesh::StaticClass(), &SPluginDesignerMenu::GetMeshPath, FOnSetObject::CreateSP(this, &SPluginDesignerMenu::OnMeshChanged), MeshThumbnailPool)
+	]
+	+SVerticalBox::Slot()
+	.AutoHeight()
+	[
+		Statics::CreateBlueprintPicker("Animation Blueprint", UAnimBlueprint::StaticClass(), &SPluginDesignerMenu::AnimBPPath , FOnSetObject::CreateSP(this, &SPluginDesignerMenu::OnAnimBPChanged), AnimBPThumbnailPool)
+	]
+	+SVerticalBox::Slot()
+	.AutoHeight()
+	[
+		Statics::CreateVectorInputField<SPluginDesignerMenu>(this, "Position", &SPluginDesignerMenu::GetXPosition, &SPluginDesignerMenu::GetYPosition, &SPluginDesignerMenu::GetZPosition, &SPluginDesignerMenu::OnPositionChanged, &SPluginDesignerMenu::OnResetPosition)
+	]
+	+SVerticalBox::Slot()
+	.AutoHeight()
+	[
+		Statics::CreateVectorInputField<SPluginDesignerMenu>(this, "Rotation", &SPluginDesignerMenu::GetXRotation, &SPluginDesignerMenu::GetYRotation, &SPluginDesignerMenu::GetZRotation, &SPluginDesignerMenu::OnRotationChanged, &SPluginDesignerMenu::OnResetRotation, 1)
+	]
+	+SVerticalBox::Slot()
+	.AutoHeight()
+	[
+		Statics::CreateVectorInputField<SPluginDesignerMenu>(this, "Scale", &SPluginDesignerMenu::GetXScale, &SPluginDesignerMenu::GetYScale, &SPluginDesignerMenu::GetZScale, &SPluginDesignerMenu::OnScaleChanged, &SPluginDesignerMenu::OnResetScale, 2)
+	]
+	+SVerticalBox::Slot()
+	.AutoHeight()
+	[
+		Statics::CreateButton<SPluginDesignerMenu>(this, "Spawn", &SPluginDesignerMenu::OnSpawnClicked)
 	];
+	
 	
 	ChildSlot
 	[
-		parentBox
+		verticalBox
 	];
 }
 
@@ -188,68 +172,69 @@ void SPluginDesignerMenu::OnSpawnClicked()
 
 void SPluginDesignerMenu::OnCreatePluginClicked()
 {
-	const FName pluginCreatorTabName( TEXT( "PluginCreator" ) );
-	FGlobalTabmanager::Get()->TryInvokeTab(pluginCreatorTabName);
+	///const FName pluginCreatorTabName( TEXT( "PluginCreator" ) );
+	///FGlobalTabmanager::Get()->TryInvokeTab(pluginCreatorTabName);
+	///
+	///
+	const bool bHasModules = PluginWizardDefinition->HasModules();
+	
+	FPluginUtils::FNewPluginParamsWithDescriptor CreationParams;
+	CreationParams.TemplateFolders = PluginWizardDefinition->GetFoldersForSelection();
+	CreationParams.Descriptor.bCanContainContent = true;
 
-	//const bool bHasModules = PluginWizardDefinition->HasModules();
-	//
-	//FPluginUtils::FNewPluginParamsWithDescriptor CreationParams;
-	//CreationParams.TemplateFolders = PluginWizardDefinition->GetFoldersForSelection();
-	//CreationParams.Descriptor.bCanContainContent = true;
-//
-	//if (bHasModules)
-	//{
-	//	CreationParams.Descriptor.Modules.Add(FModuleDescriptor(*PluginName.ToString(), PluginWizardDefinition->GetPluginModuleDescriptor(), PluginWizardDefinition->GetPluginLoadingPhase()));
-	//}
-//
-	//CreationParams.Descriptor.FriendlyName = PluginName.ToString();
-	//CreationParams.Descriptor.Version = 1;
-	//CreationParams.Descriptor.VersionName = TEXT("1.0");
-	//CreationParams.Descriptor.Category = TEXT("Other");
-//
-	//PluginWizardDefinition->GetPluginIconPath(/*out*/ CreationParams.PluginIconPath);
-	//CreationParams.Descriptor.CreatedBy = "User";
-	//CreationParams.Descriptor.CreatedByURL = "";
-	//CreationParams.Descriptor.Description = "";
-	//CreationParams.Descriptor.bIsBetaVersion = false;
-//
-	//FText FailReason;
-	//FPluginUtils::FLoadPluginParams LoadParams;
-	//LoadParams.bEnablePluginInProject = true;
-	//LoadParams.bUpdateProjectPluginSearchPath = true;
-	//LoadParams.bSelectInContentBrowser = true;
-	//LoadParams.OutFailReason = &FailReason;
-	//
-	//TSharedPtr<IPlugin> NewPlugin = FPluginUtils::CreateAndLoadNewPlugin(PluginName.ToString(), PluginFolderPath, CreationParams, LoadParams);
-	//const bool bSucceeded = NewPlugin.IsValid();
-//
-//
-	//PluginWizardDefinition->PluginCreated(PluginName.ToString(), bSucceeded);
-//
-	//if (bSucceeded)
-	//{
-	//	// Let the template create additional assets / modify state after creation
-//
-	//	// Notify that a new plugin has been created
-	//	FPluginBrowserModule& PluginBrowserModule = FPluginBrowserModule::Get();
-	//	PluginBrowserModule.BroadcastNewPluginCreated();
-//
-	//	FNotificationInfo Info(FText::Format(FTextFormat::FromString("PluginCreatedSuccessfully '{0}' was created successfully."), PluginName));
-	//	Info.bUseThrobber = false;
-	//	Info.ExpireDuration = 8.0f;
-	//	FSlateNotificationManager::Get().AddNotification(Info)->SetCompletionState(SNotificationItem::CS_Success);
-//
-	//	//
-	//	if (bHasModules)
-	//	{
-	//		FSourceCodeNavigation::OpenModuleSolution();
-	//	}
-	//}
-	//else
-	//{
-	//	const FText Title = FText::FromString("Failed to create plugin!");
-	//	FMessageDialog::Open(EAppMsgType::Ok, FailReason, &Title);
-	//}
+	if (bHasModules)
+	{
+		CreationParams.Descriptor.Modules.Add(FModuleDescriptor(*PluginName.ToString(), PluginWizardDefinition->GetPluginModuleDescriptor(), PluginWizardDefinition->GetPluginLoadingPhase()));
+	}
+
+	CreationParams.Descriptor.FriendlyName = PluginName.ToString();
+	CreationParams.Descriptor.Version = 1;
+	CreationParams.Descriptor.VersionName = TEXT("1.0");
+	CreationParams.Descriptor.Category = TEXT("Other");
+
+	PluginWizardDefinition->GetPluginIconPath(/*out*/ CreationParams.PluginIconPath);
+	CreationParams.Descriptor.CreatedBy = "User";
+	CreationParams.Descriptor.CreatedByURL = "";
+	CreationParams.Descriptor.Description = "";
+	CreationParams.Descriptor.bIsBetaVersion = false;
+
+	FText FailReason;
+	FPluginUtils::FLoadPluginParams LoadParams;
+	LoadParams.bEnablePluginInProject = true;
+	LoadParams.bUpdateProjectPluginSearchPath = true;
+	LoadParams.bSelectInContentBrowser = true;
+	LoadParams.OutFailReason = &FailReason;
+	
+	TSharedPtr<IPlugin> NewPlugin = FPluginUtils::CreateAndLoadNewPlugin(PluginName.ToString(), PluginFolderPath, CreationParams, LoadParams);
+	const bool bSucceeded = NewPlugin.IsValid();
+
+
+	PluginWizardDefinition->PluginCreated(PluginName.ToString(), bSucceeded);
+
+	if (bSucceeded)
+	{
+		// Let the template create additional assets / modify state after creation
+
+		// Notify that a new plugin has been created
+		FPluginBrowserModule& PluginBrowserModule = FPluginBrowserModule::Get();
+		PluginBrowserModule.BroadcastNewPluginCreated();
+
+		FNotificationInfo Info(FText::Format(FTextFormat::FromString("PluginCreatedSuccessfully '{0}' was created successfully."), PluginName));
+		Info.bUseThrobber = false;
+		Info.ExpireDuration = 8.0f;
+		FSlateNotificationManager::Get().AddNotification(Info)->SetCompletionState(SNotificationItem::CS_Success);
+
+		//
+		if (bHasModules)
+		{
+			FSourceCodeNavigation::OpenModuleSolution();
+		}
+	}
+	else
+	{
+		const FText Title = FText::FromString("Failed to create plugin!");
+		FMessageDialog::Open(EAppMsgType::Ok, FailReason, &Title);
+	}
 
 	
 }
