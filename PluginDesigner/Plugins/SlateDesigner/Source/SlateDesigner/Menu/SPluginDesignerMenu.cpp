@@ -1,16 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "SPluginDesignerMenu.h"
+#include "Statics.h"
 
 #include "DesktopPlatformModule.h"
 #include "IDesktopPlatform.h"
 #include "PluginUtils.h"
 #include "SlateOptMacros.h"
 #include "SourceCodeNavigation.h"
-
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Statics.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Character.h"
 #include "PluginBrowser/Private/PluginBrowserModule.h"
@@ -26,11 +22,11 @@
 #include "Input/Reply.h"
 #include "Brushes/SlateDynamicImageBrush.h"
 #include "Widgets/DeclarativeSyntaxSupport.h"
-#include "Widgets/SCompoundWidget.h"
 #include "IPluginWizardDefinition.h"
 #include "PluginBrowser/Private/NewPluginDescriptorData.h"
 #include "Slate/Public/Framework/Application/SlateApplication.h"
 #include "ModuleDescriptor.h"
+#include "Animation/AnimBlueprint.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
@@ -100,18 +96,7 @@ void SPluginDesignerMenu::InitV2Menu()
 	.AutoHeight()
 	[
 		Statics::CreateButton<SPluginDesignerMenu>(this, "Spawn", &SPluginDesignerMenu::OnSpawnClicked)
-	]
-	+SVerticalBox::Slot()
-	.AutoHeight()
-	[
-		SNew(SFilePathBlock)
-		.OnBrowseForFolder(this, &SPluginDesignerMenu::OnBrowseButtonClicked)
-		.FolderPath(this, &SPluginDesignerMenu::GetPluginDestinationPath)
-		.Name(this, &SPluginDesignerMenu::GetCurrentPluginName)
-		.OnFolderChanged(this, &SPluginDesignerMenu::OnFolderPathTextChanged)
-		.OnNameChanged(this, &SPluginDesignerMenu::OnPluginNameTextChanged)
 	];
-	
 	
 	ChildSlot
 	[
@@ -169,68 +154,68 @@ void SPluginDesignerMenu::OnSpawnClicked()
 
 void SPluginDesignerMenu::OnCreatePluginClicked()
 {
-	///const FName pluginCreatorTabName( TEXT( "PluginCreator" ) );
-	///FGlobalTabmanager::Get()->TryInvokeTab(pluginCreatorTabName);
+	const FName pluginCreatorTabName( TEXT( "PluginCreator" ) );
+	FGlobalTabmanager::Get()->TryInvokeTab(pluginCreatorTabName);
 	///
 	///
-	const bool bHasModules = PluginWizardDefinition->HasModules();
-	
-	FPluginUtils::FNewPluginParamsWithDescriptor CreationParams;
-	CreationParams.TemplateFolders = PluginWizardDefinition->GetFoldersForSelection();
-	CreationParams.Descriptor.bCanContainContent = true;
-
-	if (bHasModules)
-	{
-		CreationParams.Descriptor.Modules.Add(FModuleDescriptor(*PluginName.ToString(), PluginWizardDefinition->GetPluginModuleDescriptor(), PluginWizardDefinition->GetPluginLoadingPhase()));
-	}
-
-	CreationParams.Descriptor.FriendlyName = PluginName.ToString();
-	CreationParams.Descriptor.Version = 1;
-	CreationParams.Descriptor.VersionName = TEXT("1.0");
-	CreationParams.Descriptor.Category = TEXT("Other");
-
-	PluginWizardDefinition->GetPluginIconPath(/*out*/ CreationParams.PluginIconPath);
-	CreationParams.Descriptor.CreatedBy = "User";
-	CreationParams.Descriptor.CreatedByURL = "";
-	CreationParams.Descriptor.Description = "";
-	CreationParams.Descriptor.bIsBetaVersion = false;
-
-	FText FailReason;
-	FPluginUtils::FLoadPluginParams LoadParams;
-	LoadParams.bEnablePluginInProject = true;
-	LoadParams.bUpdateProjectPluginSearchPath = true;
-	LoadParams.bSelectInContentBrowser = true;
-	LoadParams.OutFailReason = &FailReason;
-	
-	TSharedPtr<IPlugin> NewPlugin = FPluginUtils::CreateAndLoadNewPlugin(PluginName.ToString(), PluginFolderPath, CreationParams, LoadParams);
-	const bool bSucceeded = NewPlugin.IsValid();
-
-
-	PluginWizardDefinition->PluginCreated(PluginName.ToString(), bSucceeded);
-
-	if (bSucceeded)
-	{
-		// Let the template create additional assets / modify state after creation
-
-		// Notify that a new plugin has been created
-		FPluginBrowserModule& PluginBrowserModule = FPluginBrowserModule::Get();
-		PluginBrowserModule.BroadcastNewPluginCreated();
-
-		FNotificationInfo Info(FText::Format(FTextFormat::FromString("PluginCreatedSuccessfully '{0}' was created successfully."), PluginName));
-		Info.bUseThrobber = false;
-		Info.ExpireDuration = 8.0f;
-		FSlateNotificationManager::Get().AddNotification(Info)->SetCompletionState(SNotificationItem::CS_Success);
-
-		if (bHasModules)
-		{
-			FSourceCodeNavigation::OpenModuleSolution();
-		}
-	}
-	else
-	{
-		const FText Title = FText::FromString("Failed to create plugin!");
-		FMessageDialog::Open(EAppMsgType::Ok, FailReason, &Title);
-	}
+	//const bool bHasModules = PluginWizardDefinition->HasModules();
+	//
+	//FPluginUtils::FNewPluginParamsWithDescriptor CreationParams;
+	//CreationParams.TemplateFolders = PluginWizardDefinition->GetFoldersForSelection();
+	//CreationParams.Descriptor.bCanContainContent = true;
+//
+	//if (bHasModules)
+	//{
+	//	CreationParams.Descriptor.Modules.Add(FModuleDescriptor(*PluginName.ToString(), PluginWizardDefinition->GetPluginModuleDescriptor(), PluginWizardDefinition->GetPluginLoadingPhase()));
+	//}
+//
+	//CreationParams.Descriptor.FriendlyName = PluginName.ToString();
+	//CreationParams.Descriptor.Version = 1;
+	//CreationParams.Descriptor.VersionName = TEXT("1.0");
+	//CreationParams.Descriptor.Category = TEXT("Other");
+//
+	//PluginWizardDefinition->GetPluginIconPath(/*out*/ CreationParams.PluginIconPath);
+	//CreationParams.Descriptor.CreatedBy = "User";
+	//CreationParams.Descriptor.CreatedByURL = "";
+	//CreationParams.Descriptor.Description = "";
+	//CreationParams.Descriptor.bIsBetaVersion = false;
+//
+	//FText FailReason;
+	//FPluginUtils::FLoadPluginParams LoadParams;
+	//LoadParams.bEnablePluginInProject = true;
+	//LoadParams.bUpdateProjectPluginSearchPath = true;
+	//LoadParams.bSelectInContentBrowser = true;
+	//LoadParams.OutFailReason = &FailReason;
+	//
+	//TSharedPtr<IPlugin> NewPlugin = FPluginUtils::CreateAndLoadNewPlugin(PluginName.ToString(), PluginFolderPath, CreationParams, LoadParams);
+	//const bool bSucceeded = NewPlugin.IsValid();
+//
+//
+	//PluginWizardDefinition->PluginCreated(PluginName.ToString(), bSucceeded);
+//
+	//if (bSucceeded)
+	//{
+	//	// Let the template create additional assets / modify state after creation
+//
+	//	// Notify that a new plugin has been created
+	//	FPluginBrowserModule& PluginBrowserModule = FPluginBrowserModule::Get();
+	//	PluginBrowserModule.BroadcastNewPluginCreated();
+//
+	//	FNotificationInfo Info(FText::Format(FTextFormat::FromString("PluginCreatedSuccessfully '{0}' was created successfully."), PluginName));
+	//	Info.bUseThrobber = false;
+	//	Info.ExpireDuration = 8.0f;
+	//	FSlateNotificationManager::Get().AddNotification(Info)->SetCompletionState(SNotificationItem::CS_Success);
+//
+	//	if (bHasModules)
+	//	{
+	//		FSourceCodeNavigation::OpenModuleSolution();
+	//	}
+	//}
+	//else
+	//{
+	//	const FText Title = FText::FromString("Failed to create plugin!");
+	//	FMessageDialog::Open(EAppMsgType::Ok, FailReason, &Title);
+	//}
 
 	
 }

@@ -1,13 +1,5 @@
 #pragma once
-
 #include "CoreMinimal.h"
-#include "PluginBrowser/Private/NewPluginDescriptorData.h"
-#include "PluginBrowser/Private/SFilePathBlock.h"
-
-struct FPluginTemplateDescription;
-class IPluginWizardDefinition;
-class FToolBarBuilder;
-class FMenuBuilder;
 
 class FSlateDesignerModule : public IModuleInterface
 {

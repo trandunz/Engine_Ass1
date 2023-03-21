@@ -1,17 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
-
 #include "CoreMinimal.h"
-#include "DetailColumnSizeData.h"
-#include "IPluginWizardDefinition.h"
-#include "Widgets/Layout/SSplitter.h"
 #include "Widgets/SCompoundWidget.h"
 #include "AssetRegistry/AssetData.h"
 
-/**
- * 
- */
 class SLATEDESIGNER_API SPluginDesignerMenu : public SCompoundWidget
 {
 public:
@@ -59,8 +50,6 @@ protected:
 	FText GetCurrentPluginName() const;
 	void OnFolderPathTextChanged(const FText& InText);
 	void OnPluginNameTextChanged(const FText& InText);
-
-	TSharedPtr<IPluginWizardDefinition> PluginWizardDefinition;
 	
 	//
 	// Example Blueprint Pickers
