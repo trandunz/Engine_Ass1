@@ -40,7 +40,9 @@ public class SlateDesigner : ModuleRules
 				"ApplicationCore",
 				"UMG",
 				"UMGEditor",
-				"EditorWidgets"
+				"EditorWidgets",
+				"ContentBrowser",
+				"ContentBrowserData"
 			}
 		);
 
@@ -89,7 +91,8 @@ public class SlateDesigner : ModuleRules
 				"ApplicationCore",
 				"UMG",
 				"UMGEditor",
-				"EditorWidgets"
+				"EditorWidgets",
+				"ContentBrowser"
 			}
 		);
 		

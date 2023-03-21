@@ -6,7 +6,12 @@
 #include "Animation/AnimBlueprint.h"
 #include "CoreMinimal.h"
 #include "PropertyCustomizationHelpers.h"
+#include "ContentBrowserModule.h"
+#include "IContentBrowserSingleton.h"
+#include "ContentBrowser/Private/SContentBrowser.h"
+#include "ContentBrowser/Private/SPathPicker.h"
 
+class SPluginDesignerMenu;
 /**
  * 
  */
@@ -38,6 +43,9 @@ public:
 	template<typename T>
 	static TSharedRef<SHorizontalBox> CreateButton(T* _this, FString _text, TDelegate<void()>::TMethodPtr<T> _onPressed);
 
+	//template<typename T>
+	//static TSharedPtr<SPathPicker> CreateFolderPicker(T* _this, TDelegate<void(const FString&)>::TMethodPtr<T> _onPathSelected);
+	
 	static FSlateColor GetInnerBackgroundColor();
 	static FSlateColor GetRowBackgroundColor(int32 IndentLevel, bool IsHovered);
 	static const SSplitter::FOnSlotResized& GetOnNameColumnResized();

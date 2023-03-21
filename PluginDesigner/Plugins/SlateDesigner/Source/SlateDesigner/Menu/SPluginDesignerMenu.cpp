@@ -31,6 +31,9 @@
 #include "PluginBrowser/Private/NewPluginDescriptorData.h"
 #include "Slate/Public/Framework/Application/SlateApplication.h"
 #include "ModuleDescriptor.h"
+#include "DesktopPlatformModule.h"
+#include "IDesktopPlatform.h"
+
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
@@ -60,6 +63,11 @@ void SPluginDesignerMenu::InitV2Menu()
 	.AutoHeight()
 	[
 		Statics::CreateNamedButton<SPluginDesignerMenu>(this, "Create New Plugin", &SPluginDesignerMenu::OnPluginNameChanged,&SPluginDesignerMenu::OnCreatePluginClicked)
+	]
+	+SVerticalBox::Slot()
+	.AutoHeight()
+	[
+		Statics::CreateButton(this, "FilePath",&SPluginDesignerMenu::OnBrowseButtonClicked)
 	]
 	+SVerticalBox::Slot()
 	.AutoHeight()
@@ -100,16 +108,6 @@ void SPluginDesignerMenu::InitV2Menu()
 	.AutoHeight()
 	[
 		Statics::CreateButton<SPluginDesignerMenu>(this, "Spawn", &SPluginDesignerMenu::OnSpawnClicked)
-	]
-	+SVerticalBox::Slot()
-	.AutoHeight()
-	[
-		SNew(SFilePathBlock)
-		.OnBrowseForFolder(this, &SPluginDesignerMenu::OnBrowseButtonClicked)
-		.FolderPath(this, &SPluginDesignerMenu::GetPluginDestinationPath)
-		.Name(this, &SPluginDesignerMenu::GetCurrentPluginName)
-		.OnFolderChanged(this, &SPluginDesignerMenu::OnFolderPathTextChanged)
-		.OnNameChanged(this, &SPluginDesignerMenu::OnPluginNameTextChanged)
 	];
 	
 	
@@ -137,6 +135,11 @@ FName SPluginDesignerMenu::GetNPCDisplayName()
 void SPluginDesignerMenu::OnPluginNameChanged(const FText&  _newName)
 {
 	PluginName = _newName;
+}
+
+void SPluginDesignerMenu::OnPluginPathChanged(const FString& _path)
+{
+	PluginFolderPath = _path;
 }
 
 void SPluginDesignerMenu::OnSpawnClicked()
@@ -221,6 +224,7 @@ void SPluginDesignerMenu::OnCreatePluginClicked()
 		Info.ExpireDuration = 8.0f;
 		FSlateNotificationManager::Get().AddNotification(Info)->SetCompletionState(SNotificationItem::CS_Success);
 
+		//
 		if (bHasModules)
 		{
 			FSourceCodeNavigation::OpenModuleSolution();
@@ -235,58 +239,9 @@ void SPluginDesignerMenu::OnCreatePluginClicked()
 	
 }
 
-FReply SPluginDesignerMenu::OnBrowseButtonClicked()
+void SPluginDesignerMenu::OnBrowseButtonClicked()
 {
-	IDesktopPlatform* DesktopPlatform = FDesktopPlatformModule::Get();
-	if (DesktopPlatform)
-	{
-		void* ParentWindowWindowHandle = NULL;
-
-		IMainFrameModule& MainFrameModule = FModuleManager::LoadModuleChecked<IMainFrameModule>(TEXT("MainFrame"));
-		const TSharedPtr<SWindow>& MainFrameParentWindow = MainFrameModule.GetParentWindow();
-		if (MainFrameParentWindow.IsValid() && MainFrameParentWindow->GetNativeWindow().IsValid())
-		{
-			ParentWindowWindowHandle = MainFrameParentWindow->GetNativeWindow()->GetOSWindowHandle();
-		}
-
-		FString FolderName;
-		const FString Title = "NewPluginBrowseTitle Choose a plugin location";
-		const bool bFolderSelected = DesktopPlatform->OpenDirectoryDialog(
-			FSlateApplication::Get().FindBestParentWindowHandleForDialogs(AsShared()),
-			Title,
-			LastBrowsePath,
-			FolderName
-			);
-
-		if (bFolderSelected)
-		{
-			LastBrowsePath = FolderName;
-			OnFolderPathTextChanged(FText::FromString(FolderName));
-		}
-	}
-
-	return FReply::Handled();
-}
-
-FText SPluginDesignerMenu::GetPluginDestinationPath() const
-{
-	return FText::FromString(PluginFolderPath);
-}
-
-FText SPluginDesignerMenu::GetCurrentPluginName() const
-{
-	return PluginNameText;
-}
-
-void SPluginDesignerMenu::OnFolderPathTextChanged(const FText& InText)
-{
-	PluginFolderPath = InText.ToString();
-	FPaths::MakePlatformFilename(PluginFolderPath);
-}
-
-void SPluginDesignerMenu::OnPluginNameTextChanged(const FText& InText)
-{
-	PluginNameText = InText;
+	//Statics::CreateFolderPicker<SPluginDesignerMenu>(this, &SPluginDesignerMenu::OnPluginPathChanged);
 }
 
 void SPluginDesignerMenu::OnMeshChanged(const FAssetData& _assetData)

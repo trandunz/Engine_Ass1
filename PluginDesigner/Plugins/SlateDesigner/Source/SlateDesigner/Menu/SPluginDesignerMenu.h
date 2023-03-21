@@ -41,12 +41,11 @@ protected:
 	FName GetNPCDisplayName();
 
 	void OnPluginNameChanged(const FText&);
+	void OnPluginPathChanged(const FString&);
 	
 	FText Name{};
 	FText PluginName{};
-	FString LastBrowsePath;
 	FString PluginFolderPath;
-	FText PluginNameText;
 	
 	//
 	// Example Buttons
@@ -54,13 +53,9 @@ protected:
 	private:
 	void OnSpawnClicked();
 	void OnCreatePluginClicked();
-	FReply OnBrowseButtonClicked();
-	FText GetPluginDestinationPath() const;
-	FText GetCurrentPluginName() const;
-	void OnFolderPathTextChanged(const FText& InText);
-	void OnPluginNameTextChanged(const FText& InText);
+	void OnBrowseButtonClicked();
 
-	TSharedPtr<IPluginWizardDefinition> PluginWizardDefinition;
+	TSharedPtr<class IPluginWizardDefinition> PluginWizardDefinition;
 	
 	//
 	// Example Blueprint Pickers

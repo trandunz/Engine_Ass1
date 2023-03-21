@@ -65,6 +65,7 @@
 #include "PropertyEditorModule.h"
 #include "Editor/PropertyEditor/Private/UserInterface/PropertyEditor/PropertyEditorConstants.h"
 
+
 SSplitter::FOnSlotResized Statics::OnNameColumnResized{};
 
 Statics::Statics()
@@ -226,6 +227,12 @@ TSharedRef<SHorizontalBox> Statics::CreateButton(T* _this, FString _text, TDeleg
 			.OnPressed(_this, _onPressed)
 		];
 }
+
+//template<typename T>
+//TSharedPtr<SPathPicker> Statics::CreateFolderPicker(T* _this,  TDelegate<void(const FString&)>::TMethodPtr<T> _onPathSelected)
+//{
+//	return SNew(SPathPicker);
+//}
 
 FSlateColor Statics::GetInnerBackgroundColor()
 {

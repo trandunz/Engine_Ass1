@@ -10,15 +10,27 @@
 	"DocsURL": "",
 	"MarketplaceURL": "",
 	"SupportURL": "",
-	"CanContainContent": false,
+	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
-	"Installed": false,
+	"Installed": true,
 	"Modules": [
 		{
 			"Name": "SlateDesigner",
 			"Type": "Editor",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"ContentBrowser"
+			]
+		}
+	],
+	"TargetPlatforms": [
+		"WindowsNoEditor"
+	],
+	"Plugins": [
+		{
+			"Name": "SlateScripting",
+			"Enabled": true
 		}
 	]
 }
