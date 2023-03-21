@@ -12,27 +12,24 @@
 #include "ContentBrowser/Private/SPathPicker.h"
 
 class SPluginDesignerMenu;
-/**
- * 
- */
 class SLATEDESIGNER_API Statics
 {
 public:
 	Statics();
 	~Statics();
 
-	static TSharedRef<SHorizontalBox> CreateNewTitle(FString _title);
+	static TSharedRef<class S> CreateNewTitle(FString _title);
 	
 	template<typename T>
-	static TSharedRef<SHorizontalBox> CreateNamedInputField(T* _this, FString _name, TDelegate<void(const FText&)>::TMethodPtr<T> _onNameChanged);
+	static TSharedRef<SBorder> CreateNamedInputField(T* _this, FString _name, TDelegate<void(const FText&)>::TMethodPtr<T> _onNameChanged);
 
 	template<typename T>
-	static TSharedRef<SHorizontalBox> CreateNamedButton(T* _this, FString _name, TDelegate<void(const FText&)>::TMethodPtr<T> _onNameChanged, TDelegate<void()>::TMethodPtr<T> _onPressed);
+	static TSharedRef<SBorder> CreateNamedButton(T* _this, FString _name, TDelegate<void(const FText&)>::TMethodPtr<T> _onNameChanged, TDelegate<void()>::TMethodPtr<T> _onPressed);
 	
-	static TSharedRef<SHorizontalBox> CreateBlueprintPicker(FString _name, UClass* _filter,  TIdentity_T<TDelegate<FString()>::TFuncPtr<>> _getPathFunc, TDelegate<void(const FAssetData&)> _onValueChanged, TSharedPtr<FAssetThumbnailPool>& _thumbnailPool);
+	static TSharedRef<SBorder> CreateBlueprintPicker(FString _name, UClass* _filter,  TIdentity_T<TDelegate<FString()>::TFuncPtr<>> _getPathFunc, TDelegate<void(const FAssetData&)> _onValueChanged, TSharedPtr<FAssetThumbnailPool>& _thumbnailPool);
 
 	template<typename T>
-	static TSharedRef<SHorizontalBox> CreateVectorInputField(T* _this, FString _name,
+	static TSharedRef<SBorder> CreateVectorInputField(T* _this, FString _name,
 		TDelegate<TOptional<double>()>::TConstMethodPtr<T> _getXFunc,
 		TDelegate<TOptional<double>()>::TConstMethodPtr<T> _getYFunc,
 		TDelegate<TOptional<double>()>::TConstMethodPtr<T> _getZFunc,
@@ -41,7 +38,7 @@ public:
 		int _vectorType = 0);
 
 	template<typename T>
-	static TSharedRef<SHorizontalBox> CreateButton(T* _this, FString _text, TDelegate<void()>::TMethodPtr<T> _onPressed);
+	static TSharedRef<SBorder> CreateButton(T* _this, FString _text, TDelegate<void()>::TMethodPtr<T> _onPressed);
 
 	//template<typename T>
 	//static TSharedPtr<SPathPicker> CreateFolderPicker(T* _this, TDelegate<void(const FString&)>::TMethodPtr<T> _onPathSelected);

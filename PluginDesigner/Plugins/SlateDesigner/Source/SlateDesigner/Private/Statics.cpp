@@ -76,163 +76,196 @@ Statics::~Statics()
 {
 }
 
-TSharedRef<SHorizontalBox> Statics::CreateNewTitle(FString _title)
+TSharedRef<SBorder> Statics::CreateNewTitle(FString _title)
 {
-	return SNew(SHorizontalBox)
-		+SHorizontalBox::Slot()
-		.VAlign(VAlign_Top)
-		[
-			SNew(STextBlock)
-			.Text(FText::FromString(_title))
-			.Justification(ETextJustify::Center)
-			.Margin(5)
-		];
+	return SNew(SBorder)
+			.Padding(5)
+			.HAlign(HAlign_Center)
+			.VAlign(VAlign_Top)
+			[
+				SNew(SHorizontalBox)
+				+SHorizontalBox::Slot()
+				.VAlign(VAlign_Center)
+				[
+					SNew(STextBlock)
+					.Text(FText::FromString(_title))
+					.Margin(10)
+				]
+			];
 }
+
 template<typename T>
-TSharedRef<SHorizontalBox> Statics::CreateNamedInputField(T* _this, FString _name, TDelegate<void(const FText&)>::TMethodPtr<T> _onNameChanged)
+TSharedRef<SBorder> Statics::CreateNamedInputField(T* _this, FString _name, TDelegate<void(const FText&)>::TMethodPtr<T> _onNameChanged)
 {
-	return SNew(SHorizontalBox)
-		+SHorizontalBox::Slot()
-		.VAlign(VAlign_Top)
-		[
-			SNew(STextBlock)
-			.Text(FText::FromString(_name))
-		]
-		+SHorizontalBox::Slot()
-		.VAlign(VAlign_Top)
-		[
-			SNew(SEditableTextBox)
-			.Text(FText::FromString(""))
-			.OnTextChanged(_this, _onNameChanged)
-		];
+	return SNew(SBorder)
+			.Padding(5)
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Top)
+			[
+				SNew(SHorizontalBox)
+				+SHorizontalBox::Slot()
+				.VAlign(VAlign_Center)
+				[
+					SNew(STextBlock)
+					.Margin(5)
+					.Text(FText::FromString(_name))
+				]
+				+SHorizontalBox::Slot()
+				.VAlign(VAlign_Center)
+				[
+					SNew(SEditableTextBox)
+					.Text(FText::FromString(""))
+					.OnTextChanged(_this, _onNameChanged)
+				]
+			];
 }
 
 template <typename T>
-TSharedRef<SHorizontalBox> Statics::CreateNamedButton(T* _this, FString _name,
+TSharedRef<SBorder> Statics::CreateNamedButton(T* _this, FString _name,
 	TDelegate<void(const FText&)>::TMethodPtr<T> _onNameChanged, TDelegate<void()>::TMethodPtr<T> _onPressed)
 {
-	return SNew(SHorizontalBox)
-		+SHorizontalBox::Slot()
-		.VAlign(VAlign_Top)
-		[
-			SNew(SButton)
-			.Text(FText::FromString(_name))
-			.OnPressed(_this, _onPressed)
-		]
-		+SHorizontalBox::Slot()
-		.VAlign(VAlign_Top)
-		[
-			SNew(SEditableTextBox)
-			.Text(FText::FromString(""))
-			.OnTextChanged(_this, _onNameChanged)
-		];
+	return SNew(SBorder)
+			.Padding(5)
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Top)
+			[
+				SNew(SHorizontalBox)
+				+SHorizontalBox::Slot()
+				.VAlign(VAlign_Center)
+				[
+					SNew(SButton)
+					.Text(FText::FromString(_name))
+					.OnPressed(_this, _onPressed)
+				]
+				+SHorizontalBox::Slot()
+				.VAlign(VAlign_Center)
+				[
+					SNew(SEditableTextBox)
+					.Text(FText::FromString(""))
+					.OnTextChanged(_this, _onNameChanged)
+				]
+			];
 }
 
-TSharedRef<SHorizontalBox> Statics::CreateBlueprintPicker(FString _name, UClass* _filter,
+TSharedRef<SBorder> Statics::CreateBlueprintPicker(FString _name, UClass* _filter,
 TIdentity_T<TDelegate<FString()>::TFuncPtr<>> _getPathFunc, TDelegate<void(const FAssetData&)> _onValueChanged, TSharedPtr<FAssetThumbnailPool>& _thumbnailPool)
 {
-	return SNew(SHorizontalBox)
-		+SHorizontalBox::Slot()
-		.VAlign(VAlign_Top)
-		[
-			SNew(STextBlock)
-			.Text(FText::FromString(_name))
-		]
-		+ SHorizontalBox::Slot()
-		.VAlign(VAlign_Top)
-		[
-			SNew(SObjectPropertyEntryBox)
-			.AllowedClass(_filter)
-			.EnableContentPicker(true)
-			.DisplayBrowse(true)
-			.DisplayThumbnail(true)
-			.AllowCreate(true)
-			.AllowClear(true)
-			.ThumbnailPool(_thumbnailPool)
-			.ObjectPath_Static(_getPathFunc)
-			.DisplayUseSelected(true)
-			.OnObjectChanged(_onValueChanged)
-		];
+	return SNew(SBorder)
+			.Padding(5)
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Top)
+			[
+				SNew(SHorizontalBox)
+				+SHorizontalBox::Slot()
+				.VAlign(VAlign_Center)
+				[
+					SNew(STextBlock)
+					.Margin(5)
+					.Text(FText::FromString(_name))
+				]
+				+ SHorizontalBox::Slot()
+				.VAlign(VAlign_Center)
+				[
+					SNew(SObjectPropertyEntryBox)
+						.AllowedClass(_filter)
+						.EnableContentPicker(true)
+						.DisplayBrowse(true)
+						.DisplayThumbnail(true)
+						.AllowCreate(true)
+						.AllowClear(true)
+						.ThumbnailPool(_thumbnailPool)
+						.ObjectPath_Static(_getPathFunc)
+						.DisplayUseSelected(true)
+						.OnObjectChanged(_onValueChanged)
+				]
+			];
 }
 
 template <typename T>
-TSharedRef<SHorizontalBox> Statics::CreateVectorInputField(T* _this, FString _name,
+TSharedRef<SBorder> Statics::CreateVectorInputField(T* _this, FString _name,
 	TDelegate<TOptional<double>()>::TConstMethodPtr<T> _getXFunc,
 	TDelegate<TOptional<double>()>::TConstMethodPtr<T> _getYFunc,
 	TDelegate<TOptional<double>()>::TConstMethodPtr<T> _getZFunc,
 	TDelegate<void(double)>::TMethodPtr<T, ETextCommit::Type, int, EAxisList::Type, bool> _onChanged,
 	TDelegate<void()>::TMethodPtr<T> _onReset, int _vectorType)
 {
-	return SNew(SHorizontalBox)
-			+SHorizontalBox::Slot()
+	return SNew(SBorder)
+			.Padding(5)
+			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Top)
 			[
-				SNew(SBorder)
-				.BorderImage(FAppStyle::Get().GetBrush("DetailsView.CategoryMiddle"))
-				.BorderBackgroundColor(GetInnerBackgroundColor())
-				.Padding(5)
+				SNew(SHorizontalBox)
+				+SHorizontalBox::Slot()
+				.VAlign(VAlign_Center)
 				[
-					SNew(SHorizontalBox)
-					+SHorizontalBox::Slot()
-					.AutoWidth()
-					.HAlign(HAlign_Left)
-					.VAlign(VAlign_Center)
+					SNew(SBorder)
+					.BorderImage(FAppStyle::Get().GetBrush("DetailsView.CategoryMiddle"))
+					.BorderBackgroundColor(GetInnerBackgroundColor())
+					.Padding(5)
 					[
-						SNew(STextBlock)
-						.Text(FText::FromString(_name))
-					]
-					+SHorizontalBox::Slot()
-					.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Center)
-					[
-					SNew(SNumericVectorInputBox<FVector::FReal>)
-							.X(_this,_getXFunc)
-							.Y(_this,_getYFunc)
-							.Z(_this,_getZFunc)
-							.bColorAxisLabels(true)
-							.OnXChanged(_this, _onChanged, ETextCommit::Default, _vectorType, EAxisList::X, false)
-							.OnYChanged(_this, _onChanged, ETextCommit::Default, _vectorType, EAxisList::Y, false)
-							.OnZChanged(_this, _onChanged, ETextCommit::Default, _vectorType, EAxisList::Z, false)
-							.OnXCommitted(_this, _onChanged, _vectorType, EAxisList::X, true)
-							.OnYCommitted(_this, _onChanged, _vectorType, EAxisList::Y, true)
-							.OnZCommitted(_this, _onChanged, _vectorType, EAxisList::Z, true)
-							.AllowSpin(true)
-							.SpinDelta(1)
-							
-					]
-					+SHorizontalBox::Slot()
-					.AutoWidth()
-					.HAlign(HAlign_Right)
-					.VAlign(VAlign_Center)
-					[
-					SNew(SButton)
-						.HAlign(HAlign_Center)
-						.Text(FText::FromString("Reset"))
-						.OnPressed(_this, _onReset)
+						SNew(SHorizontalBox)
+						+SHorizontalBox::Slot()
+						.AutoWidth()
+						.HAlign(HAlign_Left)
+						.VAlign(VAlign_Center)
+						[
+							SNew(STextBlock)
+							.Margin(5)
+							.Text(FText::FromString(_name))
+						]
+						+SHorizontalBox::Slot()
+						.HAlign(HAlign_Fill)
+						.VAlign(VAlign_Center)
+						[
+						SNew(SNumericVectorInputBox<FVector::FReal>)
+								.X(_this,_getXFunc)
+								.Y(_this,_getYFunc)
+								.Z(_this,_getZFunc)
+								.bColorAxisLabels(true)
+								.OnXChanged(_this, _onChanged, ETextCommit::Default, _vectorType, EAxisList::X, false)
+								.OnYChanged(_this, _onChanged, ETextCommit::Default, _vectorType, EAxisList::Y, false)
+								.OnZChanged(_this, _onChanged, ETextCommit::Default, _vectorType, EAxisList::Z, false)
+								.OnXCommitted(_this, _onChanged, _vectorType, EAxisList::X, true)
+								.OnYCommitted(_this, _onChanged, _vectorType, EAxisList::Y, true)
+								.OnZCommitted(_this, _onChanged, _vectorType, EAxisList::Z, true)
+								.AllowSpin(true)
+								.SpinDelta(1)
+								
+						]
+						+SHorizontalBox::Slot()
+						.AutoWidth()
+						.HAlign(HAlign_Right)
+						.VAlign(VAlign_Center)
+						[
+						SNew(SButton)
+							.HAlign(HAlign_Center)
+							.Text(FText::FromString("Reset"))
+							.OnPressed(_this, _onReset)
+						]
 					]
 				]
 			];
 }
 
 template <typename T>
-TSharedRef<SHorizontalBox> Statics::CreateButton(T* _this, FString _text, TDelegate<void()>::TMethodPtr<T> _onPressed)
+TSharedRef<SBorder> Statics::CreateButton(T* _this, FString _text, TDelegate<void()>::TMethodPtr<T> _onPressed)
 {
-	return SNew(SHorizontalBox)
-		+SHorizontalBox::Slot()
-		.HAlign(HAlign_Center)
-		.VAlign(VAlign_Top)
-		[
-			SNew(SButton)
-			.Text(FText::FromString(_text))
-			.OnPressed(_this, _onPressed)
-		];
+	return SNew(SBorder)
+			.Padding(5)
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Top)
+			[
+				SNew(SHorizontalBox)
+				+SHorizontalBox::Slot()
+				.HAlign(HAlign_Center)
+				.VAlign(VAlign_Center)
+				[
+					SNew(SButton)
+					.Text(FText::FromString(_text))
+					.OnPressed(_this, _onPressed)
+				]
+			];
 }
-
-//template<typename T>
-//TSharedPtr<SPathPicker> Statics::CreateFolderPicker(T* _this,  TDelegate<void(const FString&)>::TMethodPtr<T> _onPathSelected)
-//{
-//	return SNew(SPathPicker);
-//}
 
 FSlateColor Statics::GetInnerBackgroundColor()
 {
