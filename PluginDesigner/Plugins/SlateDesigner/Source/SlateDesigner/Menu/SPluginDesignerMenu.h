@@ -22,9 +22,9 @@ public:
 
 	/**
 	 * @brief Gets called when SNew(SPluginDesignerMenu)
-	 * @param InArgs 
+	 * @param _inArgs 
 	 */
-	void Construct(const FArguments& InArgs);
+	void Construct(const FArguments& _inArgs);
 	
 protected:
 	/**

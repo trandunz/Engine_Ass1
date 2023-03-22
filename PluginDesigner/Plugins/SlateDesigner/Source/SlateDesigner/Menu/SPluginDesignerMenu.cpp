@@ -10,7 +10,6 @@
 
 #include "SPluginDesignerMenu.h"
 #include "Statics.h"
-
 #include "DesktopPlatformModule.h"
 #include "IDesktopPlatform.h"
 #include "PluginUtils.h"
