@@ -1,81 +1,80 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : SlateDesigner.cpp 
+// Description : SlateDesigner Implementation File
+// Author : William Inman
+// Mail : William.inman@mds.ac.nz
+
 #include "SlateDesigner.h"
 
+#include "EditorStyleSet.h"
 #include "ModuleDescriptor.h"
 #include "SlateDesignerStyle.h"
 #include "SlateDesignerCommands.h"
-#include "Misc/MessageDialog.h"
 #include "ToolMenus.h"
-#include "Widgets/Input/SCheckBox.h"
 #include "PluginDescriptor.h"
-#include "Interfaces/IPluginManager.h"
 #include "Framework/Notifications/NotificationManager.h"
 #include "Widgets/Notifications/SNotificationList.h"
 #include "GameProjectGenerationModule.h"
-#include "PluginBrowser/Private/PluginBrowserModule.h"
 #include "ProjectDescriptor.h"
-#include "PluginUtils.h"
 #include "Interfaces/IMainFrameModule.h"
-#include "PluginBrowser/Private/DefaultPluginWizardDefinition.h"
-#include "SourceCodeNavigation.h"
-#include "PluginBrowser/Private/SNewPluginWizard.h"
+#include "Interfaces/IPluginManager.h"
 #include "SlateDesigner/Menu/SPluginDesignerMenu.h"
+#include "Styling/SlateStyleMacros.h"
 
 struct FPluginTemplateDescription;
-static const FName SlateDesignerTabName("SlateDesigner");
+static const FName SlateDesignerTabName("Slate Designer");
 
 #define LOCTEXT_NAMESPACE "FSlateDesignerModule"
 
 void FSlateDesignerModule::StartupModule()
 {
+	// Init the style
 	FSlateDesignerStyle::Initialize();
+	// Init the textures
 	FSlateDesignerStyle::ReloadTextures();
-
+	// Register the commands class
 	FSlateDesignerCommands::Register();
-	
+	// make a new command pool
 	PluginCommands = MakeShareable(new FUICommandList);
 
+	// Map 'pluginButtonClicked' function to the action / command of clicking the plugin button in toolbar
 	PluginCommands->MapAction(
 		FSlateDesignerCommands::Get().PluginAction,
 		FExecuteAction::CreateRaw(this, &FSlateDesignerModule::PluginButtonClicked),
 		FCanExecuteAction());
 
+	// Register the startup callback 'RegisterMenus'
 	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FSlateDesignerModule::RegisterMenus));
 
+	// Register a new tab spawner with the ID 'SlateDesignerTabName'. Will call 'onSpawnPluginTab' when 'FGlobalTabmanager::Get()->TryInvokeTab' is invoked
 	FGlobalTabmanager::Get()->RegisterNomadTabSpawner(SlateDesignerTabName, FOnSpawnTab::CreateRaw(this, &FSlateDesignerModule::OnSpawnPluginTab))
-	.SetDisplayName(LOCTEXT("SlateDesignerTitle", "SlateDesigner (Example Window)"))
+	.SetDisplayName(LOCTEXT("SlateDesignerTitle", "Slate Designer"))
 	.SetMenuType(ETabSpawnerMenuType::Hidden);
 }
 
 void FSlateDesignerModule::ShutdownModule()
 {
 	UToolMenus::UnRegisterStartupCallback(this);
-
 	UToolMenus::UnregisterOwner(this);
-
 	FSlateDesignerStyle::Shutdown();
-
 	FSlateDesignerCommands::Unregister();
-	
 	FGlobalTabmanager::Get()->UnregisterNomadTabSpawner(SlateDesignerTabName);
 }
 
 void FSlateDesignerModule::RegisterMenus()
 {
-	FToolMenuOwnerScoped OwnerScoped(this);
+	// Not really sure, I think it has to do with the non-local nature of slate instantiation
+	FToolMenuOwnerScoped ownerScoped(this);
 
-	UToolMenu* Menu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu.Tools");
+	// Add a menu entry with the command pool we specified before to 'Tools -> Programming -> Slate Designer'
+	if (UToolMenu* menu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu.Tools"))
 	{
-		FToolMenuSection& Section = Menu->FindOrAddSection("Programming");
-		Section.AddMenuEntryWithCommandList(FSlateDesignerCommands::Get().PluginAction, PluginCommands);
-	}
-	
-	UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar");
-	{
-		FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("Settings");
-		{
-			FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FSlateDesignerCommands::Get().OpenPluginWindow));
-			Entry.SetCommandList(PluginCommands);
-		}
+		FToolMenuSection& section = menu->FindOrAddSection("Programming");
+		section.AddMenuEntryWithCommandList(FSlateDesignerCommands::Get().PluginAction, PluginCommands);
 	}
 }
 void FSlateDesignerModule::PluginButtonClicked()
@@ -83,8 +82,9 @@ void FSlateDesignerModule::PluginButtonClicked()
 	FGlobalTabmanager::Get()->TryInvokeTab(SlateDesignerTabName);
 }
 
-TSharedRef<SDockTab> FSlateDesignerModule::OnSpawnPluginTab(const FSpawnTabArgs& SpawnTabArgs)
+TSharedRef<SDockTab> FSlateDesignerModule::OnSpawnPluginTab(const FSpawnTabArgs& _spawnTabArgs)
 {
+	// Create a new Nomad DockTab containing our SPluginDesignerMenu
 	return SNew(SDockTab)
 		.TabRole(ETabRole::NomadTab)
 		[

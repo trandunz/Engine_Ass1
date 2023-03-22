@@ -1,3 +1,13 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : SPluginDesignerMenu.h 
+// Description : SPluginDesignerMenu Header File
+// Author : William Inman
+// Mail : William.inman@mds.ac.nz
+
 #pragma once
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
@@ -10,83 +20,100 @@ public:
 	{}
 	SLATE_END_ARGS()
 
-	//
+	/**
+	 * @brief Gets called when SNew(SPluginDesignerMenu)
+	 * @param InArgs 
+	 */
 	void Construct(const FArguments& InArgs);
-	void InitV2Menu();
 	
 protected:
-	
-	//
-	// Example Misc
-	//
-	private:
-	void OnHostileCheckboxChanged(ECheckBoxState NewState);
-	bool bIsTestBoxChecked{};
-	
+	/**
+	 * @brief Create The Slate Designer Menu
+	 */
+	void InitSlateDesignerMenu();
 
+	/**
+	 * @brief Create the example menu (NPC)
+	 */
+	void InitExampleMenu();
+
+	/**
+	 * @brief Create a custom menu with the specified title
+	 * @param _title
+	 */
+	void InitBasicMenu(FString _title);
+
+	/**
+	 * @brief Called when the 'new window' input field changes (sets windowName)
+	 */
+	void OnWindowNameChanged(const FText&);
+	FText WindowName{};
+
+	/**
+	 * @brief Creates a new custom slate menu
+	 */
+	void OnCreateNewMenuClicked();
+	/**
+	 * @brief Deletes the last custom slate menu if available
+	 */
+	void OnDeleteLastMenuClicked();
+	/**
+	 * @brief Short cut function to open the plugin creator wizard (UN-USED)
+	 */
+	void OnCreatePluginClicked();
+	
+	SVerticalBox* ParentBox{nullptr};
+	SVerticalBox* CurrentlyUsedMenus{nullptr};
+	TArray<TSharedRef<SWidget>> SpawnedMenuTitles{};
+	TArray<TSharedRef<SWidget>> SpawnedMenus{};
+	
+/**
+ *  Example Menu Functions and Variables (NPC Menu)
+ */
+private:
 	//
-	//	Example input field
+	// Spawn Button
 	//
-	private:
+	void OnSpawnClicked();
+	
+	//
+	// Name Input Field
+	//
 	void OnNameChanged(const FText&);
 	FName GetNPCDisplayName();
-
-	void OnPluginNameChanged(const FText&);
-	
 	FText Name{};
-	FText PluginName{};
-	FString LastBrowsePath;
-	FString PluginFolderPath;
-	FText PluginNameText;
-	
+
 	//
-	// Example Buttons
+	// Asset Pickers
 	//
-	private:
-	void OnSpawnClicked();
-	void OnCreatePluginClicked();
-	FReply OnBrowseButtonClicked();
-	FText GetPluginDestinationPath() const;
-	FText GetCurrentPluginName() const;
-	void OnFolderPathTextChanged(const FText& InText);
-	void OnPluginNameTextChanged(const FText& InText);
-	
-	//
-	// Example Blueprint Pickers
-	//
-	private:
 	void OnMeshChanged(const FAssetData&);
 	static FString GetMeshPath();
 	void OnAnimBPChanged(const FAssetData&);
 	static FString AnimBPPath();
-	void OnBlackboardChanged(const FAssetData&);
-	static FString GetBlackboardPath();
 
 	static FAssetData MeshAssetData;
-	static FAssetData AIBlackboardAssetData;
 	static FAssetData AnimationBPData;
 
 	TSharedPtr<FAssetThumbnailPool> MeshThumbnailPool;
-	TSharedPtr<FAssetThumbnailPool> AIBlackboardThumbnailPool;
 	TSharedPtr<FAssetThumbnailPool> AnimBPThumbnailPool;
 
 	//
-	// Example Transform
+	// Transform
 	//
 	private:
-	void OnPositionChanged(FVector::FReal NewValue, ETextCommit::Type CommitInfo, int TransformField, EAxisList::Type Axis, bool bCommitted);
+	void OnPositionChanged(FVector::FReal _newValue, ETextCommit::Type _commitInfo, int _transformField, EAxisList::Type _axis, bool _bCommitted);
 	TOptional<double> GetXPosition() const;
 	TOptional<double> GetYPosition() const;
 	TOptional<double> GetZPosition() const;
 	void OnResetPosition();
 
-	void OnRotationChanged(FVector::FReal NewValue, ETextCommit::Type CommitInfo, int TransformField, EAxisList::Type Axis, bool bCommitted);
+	void OnRotationChanged(FVector::FReal _newValue, ETextCommit::Type _commitInfo, int _transformField, EAxisList::Type _axis, bool _bCommitted);
 	TOptional<double> GetXRotation() const;
 	TOptional<double> GetYRotation() const;
 	TOptional<double> GetZRotation() const;
 	void OnResetRotation();
 	
-	void OnScaleChanged(FVector::FReal NewValue, ETextCommit::Type CommitInfo, int TransformField, EAxisList::Type Axis, bool bCommitted);
+	void OnScaleChanged(FVector::FReal _newValue, ETextCommit::Type _commitInfo, int _transformField, EAxisList::Type _axis, bool _bCommitted);
 	TOptional<double> GetXScale() const;
 	TOptional<double> GetYScale() const;
 	TOptional<double> GetZScale() const;

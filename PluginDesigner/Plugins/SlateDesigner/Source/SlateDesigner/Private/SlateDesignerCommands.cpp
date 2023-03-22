@@ -1,4 +1,12 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : SlateDesignerCommands.cpp 
+// Description : SlateDesignerCommands Implementation File
+// Author : William Inman
+// Mail : William.inman@mds.ac.nz
 
 #include "SlateDesignerCommands.h"
 
